@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطعم بوارق - القائمة والأسعار</title>
+    <style>
+        :root { --primary: #c0392b; --bg: #fffbf7; --text: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 120px; }
+        header { background: var(--primary); color: white; padding: 30px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
+        .section-title { padding: 15px 20px; font-size: 1.2em; font-weight: bold; color: var(--primary); }
+        .menu-container { padding: 10px; max-width: 500px; margin: auto; }
+        .card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 15px; cursor: pointer; }
+        .btn-del { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 15px; cursor: pointer; margin-right: 5px; }
+        .cart-bar { position: fixed; bottom: 0; width: 100%; background: #2c3e50; color: white; padding: 15px; text-align: center; border-top-left-radius: 20px; border-top-right-radius: 20px; }
+        .btn-order { background: #25D366; color: white; padding: 12px 30px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>مطعم بوارق 🍲</h1>
+    <p>الأصالة في كل وجبة</p>
+</header>
+
+<div class="menu-container" id="menu"></div>
+
+<div class="cart-bar">
+    <div>المجموع الكلي: <span id="total">0</span> ر.س</div>
+    <button class="btn-order" onclick="send()">إتمام الطلب (واتساب) 📲</button>
+</div>
+
+<script>
+    const menu = [
+        {cat: "الوجبات الرئيسية", items: [
+            {n: "مندي دجاج", p: 35}, {n: "مظبي دجاج", p: 35}, {n: "شواية", p: 30},
+            {n: "مندي لحم", p: 65}, {n: "مظبي لحم", p: 65}, {n: "كبسة دجاج", p: 30}
+        ]},
+        {cat: "مشويات ومقبلات", items: [
+            {n: "مشكل مشويات", p: 45}, {n: "كباب لحم", p: 35}, {n: "شيش طاووق", p: 30},
+            {n: "سلطة خضراء", p: 5}, {n: "جريش", p: 10}, {n: "سمبوسة (حبة)", p: 2}
+        ]},
+        {cat: "مشروبات", items: [
+            {n: "بيبسي", p: 3}, {n: "سفن أب", p: 3}, {n: "لبن طازج", p: 4}, {n: "ماء", p: 1}
+        ]}
+    ];
+
+    function loadMenu() {
+        let container = document.getElementById("menu");
+        menu.forEach(section => {
+            container.innerHTML += `<div class="section-title">${section.cat}</div>`;
+            section.items.forEach(item => {
+                container.innerHTML += `<div class="card">
+                    <span><strong>${item.n}</strong><br><small style="color:red">السعر: ${item.p} ر.س</small></span>
+                    <div>
+                        <button class="btn-del" onclick="remove(${item.p})">-</button>
+                        <button class="btn-add" onclick="add(${item.p})">+</button>
+                    </div>
+                </div>`;
+            });
+        });
+    }
+
+    let total = 0;
+    function add(p) { total += p; document.getElementById("total").innerText = total; }
+    function remove(p) { if(total >= p) total -= p; document.getElementById("total").innerText = total; }
+
+    function send() {
+        if(total == 0) return alert("الرجاء اختيار وجباتك أولاً!");
+        window.location.href = "https://wa.me/966502260743?text=مرحباً، أريد طلب وجبات من مطعم بوارق. المجموع الكلي: " + total + " ر.س";
+    }
+    loadMenu();
+</script>
+</body>
+</html>
